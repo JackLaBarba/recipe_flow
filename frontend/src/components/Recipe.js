@@ -1,5 +1,6 @@
 import { Dag } from "./Dag";
 import Modal from "react-modal";
+
 import { useState } from "react";
 
 const Recipe = (props) => {
@@ -38,14 +39,12 @@ const Recipe = (props) => {
       </Modal>
       <h2>{props.recipe.title}</h2>
       <h3>Description</h3>
-      <p>
-        This onion soup isn't very delicious but it's good for demonstrating a
-        user experience.
-      </p>
+      <p>{props.recipe.description}</p>
       <h3>Ingredients</h3>
       <ul>
-        <li>1 onion</li>
-        <li>1 quart water</li>
+        {props.recipe.ingredients.map((ingredient, index) => (
+          <li key={index}>{ingredient}</li>
+        ))}
       </ul>
       <h3>Steps</h3>
       <Dag data={props.recipe.steps} onNodeClick={openModal} />
