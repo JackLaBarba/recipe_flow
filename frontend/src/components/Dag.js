@@ -14,29 +14,7 @@ export const Dag = (props) => {
   useEffect(
     () => {
       if (props.data && d3Container.current) {
-        const data = [
-          {
-            id: "1",
-            title: "chop",
-            parentIds: [],
-          },
-          {
-            id: "2",
-            title: "boil",
-            parentIds: [],
-          },
-          {
-            id: "3",
-            title: "cook",
-            parentIds: ["1", "2"],
-          },
-          {
-            id: "4",
-            title: "serve",
-            parentIds: ["3"],
-          },
-        ];
-        const dag = dagStratify()(data);
+        const dag = dagStratify()(props.data);
         const nodeRadius = 20;
         const layout = sugiyama() // base layout
           .decross(decrossOpt()) // minimize number of crossings

@@ -1,10 +1,11 @@
-import { Dag } from "./components/Dag";
+import Recipe from "./components/Recipe";
+import recipes from "./fake_data/recipes";
 
 /* App */
 export default function App() {
   return (
     <div className="my-app">
-      <Dag data={[1, 2, 3, 4]} />
+      <Recipe recipe={recipes[0]} />
     </div>
   );
 }
