@@ -25,6 +25,13 @@ const Recipe = (props) => {
         contentLabel="Example Modal"
       >
         <h2>Step: {modalContents.title}</h2>
+        <img
+          height="50%"
+          src={modalContents.imageSource}
+          alt={modalContents.title}
+        ></img>
+        <h3>Description</h3>
+        <div>{modalContents.description}</div>
 
         <button onClick={closeModal}>close</button>
         <button onClick={closeModal}>Mark completed</button>
