@@ -7,7 +7,7 @@ export default function Home() {
       <Link to="recipes">
         <button>Cook something!</button>
       </Link>
-      <p>or login and <Link to="login">create a recipe</Link></p>
+      <p>or login and <Link to="/recipes/new">create a recipe</Link></p>
     </div>
   );
 }

@@ -6,12 +6,14 @@ import jwt from "jsonwebtoken";
 import UserModel from "./models/user.mjs";
 import bodyParser from "body-parser";
 import crypto from "crypto";
+import cors from "cors";
 
 config();
 await connect();
 
 const app = express();
 
+app.use(cors());
 app.use(bodyParser.json())
 
 const { API_PORT, JWT_SECRET } = process.env;

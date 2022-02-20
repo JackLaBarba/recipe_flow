@@ -34,3 +34,15 @@ content-type: application/json
 { 
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjIxMjk2MGM1MGFiNTU1MDdhZTcxYzFjIiwiaWF0IjoxNjQ1Mzg1MjMxLCJleHAiOjE2NDU0NzE2MzF9.2S8xyRaRN5huKEif3cKpmys2fZZUxQ1WdkBz-Q4swL0"
 }
+
+
+###
+# create a test user that has easy type credentials
+POST http://localhost:4000/register HTTP/1.1
+content-type: application/json
+
+{ 
+    "name": "test",
+    "email": "test@gmail.com",
+    "password": "1234"
+}
