@@ -16,9 +16,28 @@ app.use(bodyParser.json())
 
 const { API_PORT, JWT_SECRET } = process.env;
 
-app.post('/login', (req, res) => {
-    const token = jwt.sign({ user: "jack" }, JWT_SECRET, { expiresIn: "2h" });
-    res.status(200).json(token);
+app.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+
+    // Check if a user with that email exists
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+        return res.status(404).json({ error: "No user with that email" });
+    }
+
+    // Check the client-supplied password
+    const password_hash = crypto.pbkdf2Sync(password,  
+        user.salt, 1000, 64, `sha512`).toString(`hex`);
+    if (password_hash !== user.password_hash) {
+        return res.status(400).json({ error: "Invalid password" });
+    }
+
+    // if we've made it here, the user had the right credentials.
+    // Create a token for them.
+    // create jwt
+    user.token = jwt.sign({ email }, JWT_SECRET, { expiresIn: "1d" });
+
+    res.status(201).json(user);
 });
 
 app.post('/register', async (req, res) => {
@@ -28,12 +47,18 @@ app.post('/register', async (req, res) => {
         return res.status(400).send("User already exists with this email");
     }
 
-    const password_hash = crypto.createHash("sha256").update(password).digest("base64");
+    // Citation
+    // https://www.loginradius.com/blog/async/password-hashing-with-nodejs/
+    const salt = crypto.randomBytes(16).toString('hex');
+    const password_hash = crypto.pbkdf2Sync(password, salt,  
+        1000, 64, `sha512`).toString(`hex`);
+    
     // create User
     const user = await UserModel.create({
         name,
         email,
-        password_hash
+        password_hash,
+        salt
     });
 
     // create jwt
