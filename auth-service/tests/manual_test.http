@@ -1,19 +1,36 @@
+# This file works best with the "Rest Client" VS Code plugin
 
+###
+# Register a new user
+# Returns a token with can be used to authenticate subsequent requests using 
+# /verify_token
 POST http://localhost:4000/register HTTP/1.1
 content-type: application/json
 
 { 
-    "name": "jack",
-    "email": "jack1234@jack.com",
-    "password": "1234"
+    "name": "New McUser",
+    "email": "new_mcuser@gmail.com",
+    "password": "a very secret password"
 }
 
 ###
-
+# Login with credentials
+# Returns a token with can be used to authenticate subsequent requests using 
+# /verify_token
 POST http://localhost:4000/login HTTP/1.1
 content-type: application/json
 
 { 
-    "email": "jack1234@jack.com",
-    "password": "1234d"
+    "email": "new_mcuser@gmail.com",
+    "password": "a very secret password"
+}
+
+### 
+# Determine if the supplied token is valid.
+# Replace the value of "token" with the token returned by /login or /register
+POST http://localhost:4000/verify_token HTTP/1.1
+content-type: application/json
+
+{ 
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjIxMjk2MGM1MGFiNTU1MDdhZTcxYzFjIiwiaWF0IjoxNjQ1Mzg1MjMxLCJleHAiOjE2NDU0NzE2MzF9.2S8xyRaRN5huKEif3cKpmys2fZZUxQ1WdkBz-Q4swL0"
 }

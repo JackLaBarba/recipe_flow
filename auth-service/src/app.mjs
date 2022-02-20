@@ -35,7 +35,7 @@ app.post('/login', async (req, res) => {
     // if we've made it here, the user had the right credentials.
     // Create a token for them.
     // create jwt
-    user.token = jwt.sign({ email }, JWT_SECRET, { expiresIn: "1d" });
+    user.token = jwt.sign({ user_id: user._id }, JWT_SECRET, { expiresIn: "1d" });
 
     res.status(201).json(user);
 });
@@ -50,7 +50,7 @@ app.post('/register', async (req, res) => {
     // Citation
     // https://www.loginradius.com/blog/async/password-hashing-with-nodejs/
     const salt = crypto.randomBytes(16).toString('hex');
-    const password_hash = crypto.pbkdf2Sync(password, salt,  
+    const password_hash = crypto.pbkdf2Sync(password, salt,
         1000, 64, `sha512`).toString(`hex`);
     
     // create User
@@ -62,10 +62,20 @@ app.post('/register', async (req, res) => {
     });
 
     // create jwt
-    user.token = jwt.sign({ email }, JWT_SECRET, { expiresIn: "1d" });
+    user.token = jwt.sign({ user_id: user._id }, JWT_SECRET, { expiresIn: "1d" });
 
     res.status(201).json(user);
-})
+});
+
+app.post("/verify_token", (req, res) => {
+    const { token } = req.body;
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET);
+        return res.status(200).json(decoded);
+    } catch {
+        return res.status(403).json({ error: "invalid token" });
+    }
+});
 
 app.use(express.json());
 
