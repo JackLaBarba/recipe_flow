@@ -16,20 +16,26 @@ export default function Login({ setUserToken }) {
     let navigate = useNavigate();
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
+    const [error, setError] = useState();
 
-    const handleSubmit = async e => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        const { token } = await loginUser({
+        const { token, error } = await loginUser({
           email,
           password
         });
-        setUserToken(token);
-        navigate("/recipes/new");
+        if (error) {
+            setError(error);
+        } else {
+            setUserToken(token);
+            navigate("/recipes/new");  // TODO: redirect to the page the user attempted to view
+        }
       }    
 
     return(
       <div className="login-wrapper">
-        <h1>Please Log In</h1>
+            <h1>Please Log In</h1>
+            <p className="error">{error}</p>
         <form onSubmit={handleSubmit}>
           <label>
             <p>Email</p>
