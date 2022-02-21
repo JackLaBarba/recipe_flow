@@ -1,0 +1,29 @@
+###
+
+POST http://localhost:4001/recipe HTTP/1.1
+content-type: application/json
+
+{
+    "title": "Demo onion soup",
+    "description":
+      "This onion soup isn't very delicious but it's good for demonstrating a user experience.",
+    "ingredients": ["1 onion", "water"],
+    "steps": [
+      {
+        "id": "1",
+        "title": "chop",
+        "description": "Chop 1 onion into 1cm pieces.",
+        "imageSource":
+          "https://images.pexels.com/photos/4198169/pexels-photo-4198169.jpeg",
+        "parentIds": []
+      },
+      {
+        "id": "2",
+        "title": "boil",
+        "description": "Boil 1 quart of water",
+        "imageSource":
+          "https://images.pexels.com/photos/11069886/pexels-photo-11069886.jpeg",
+        "parentIds": []
+      }
+    ]
+}
