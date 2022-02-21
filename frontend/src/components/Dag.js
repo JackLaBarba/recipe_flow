@@ -31,8 +31,8 @@ export const Dag = (props) => {
         svgSelection.attr("viewBox", [0, 0, width, height].join(" "));
         const defs = svgSelection.append("defs"); // For gradients
 
-        const steps = dag.size();
-        const interp = d3.interpolateRainbow;
+        // const steps = dag.size();
+        // const interp = d3.interpolateRainbow;
         const colorMap = new Map();
         //for (const [i, node] of dag.idescendants().entries()) {
         // colorMap.set(node.data.id, interp(i / steps));
@@ -118,7 +118,7 @@ export const Dag = (props) => {
             if the variables are valid, but we do not have to compare old props
             to next props to decide whether to rerender.
         */
-    [props.data, d3Container.current]
+    [props.data, props]
   );
 
   return (

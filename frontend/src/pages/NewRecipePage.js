@@ -1,7 +1,8 @@
-import { useEffect} from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom"
 import NewRecipe from "../components/NewRecipe";
 import Config from "../config";
+import { Link } from "react-router-dom";
 
 
 export default function NewRecipePage({ user_token }) {
@@ -23,11 +24,15 @@ export default function NewRecipePage({ user_token }) {
         }
         return verifyUserToken(user_token).then((verified) => {
             if (!verified) {
-                navigate("/login");            
+                navigate("/login");
             }
         });
 
     }, [user_token, navigate]);
 
-    return <NewRecipe></NewRecipe>
+    return <div>
+        <h1>RecipeFlow</h1>
+        <Link to={`/`}>go back</Link>
+        <NewRecipe></NewRecipe>
+    </div>
 }

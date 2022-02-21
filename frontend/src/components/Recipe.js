@@ -23,7 +23,7 @@ const Recipe = (props) => {
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
-        contentLabel="Example Modal"
+        contentLabel="Step"
       >
         <h2>Step: {modalContents.title}</h2>
         <img

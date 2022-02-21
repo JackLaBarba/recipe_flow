@@ -1,12 +1,28 @@
 import { useState } from "react"
+import { useNavigate } from "react-router-dom";
 import Config from "../config";
 import AddStep from "./AddStep";
 import { Dag } from "./Dag";
+import Modal from "react-modal";
 
 export default function NewRecipe() {
     const [title, setTitle] = useState("");
     const [steps, setSteps] = useState([]);
     const [stepId, setSetId] = useState(1);
+    const [modalIsOpen, setIsOpen] = useState(false);
+    const [modalContents, setModalContents] = useState({});
+    let navigate = useNavigate();
+
+    const openModal = (d) => {
+        Modal.setAppElement("#recipe-flow");
+        console.log(d);
+        setModalContents(d);
+        setIsOpen(true);
+    };
+
+    function closeModal() {
+        setIsOpen(false);
+    }
 
     const onSubmit = async (e) => {
         e.preventDefault();
@@ -17,32 +33,40 @@ export default function NewRecipe() {
                 body: JSON.stringify({ title, steps })
             }
         );
-
+        navigate("/recipes/");
     };
 
     const addStep = (new_step) => {
         console.log(JSON.stringify(new_step));
         setSteps(arr => [...arr, new_step]);
         setSetId(stepId + 1);
+        closeModal();
     }
 
     return (
-    <div>
-        <form onSubmit={onSubmit}>
+        <div>
+            <Modal
+                isOpen={modalIsOpen}
+                onRequestClose={closeModal}
+                contentLabel="Step"
+            >
+                <AddStep stepId={stepId} addStep={addStep}></AddStep>
+
+            </Modal>
             <label>
-                <p>Recipe Title</p>
+                <h2>Title</h2>
                 <input type="text" onChange={e => setTitle(e.target.value)}></input>
             </label>
+            <h2>Steps</h2>
             <div>
-                <button type="submit">Submit</button>
+                <button onClick={openModal}>Add a step</button>
             </div>
-        </form>
-        
-            <AddStep stepId={stepId} addStep={addStep}></AddStep>
-            {steps.length}
 
-        {steps.length > 0 && <Dag data={steps}></Dag>}
+            {steps.length > 0 && <Dag data={steps}></Dag>}
+            <div>
+                <button type="submit" onClick={onSubmit}>Publish Recipe!</button>
+            </div>
 
 
-    </div>)
+        </div>)
 }
