@@ -41,11 +41,6 @@ const Recipe = (props) => {
       <h3>Description</h3>
       <p>{props.recipe.description}</p>
       <h3>Ingredients</h3>
-      <ul>
-        {props.recipe.ingredients.map((ingredient, index) => (
-          <li key={index}>{ingredient}</li>
-        ))}
-      </ul>
       <h3>Steps</h3>
       <Dag data={props.recipe.steps} onNodeClick={openModal} />
     </div>

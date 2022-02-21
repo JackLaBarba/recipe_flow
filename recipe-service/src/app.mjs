@@ -32,6 +32,11 @@ app.get('/recipe', async (req, res) => {
     return res.send(await query.exec());
 });
 
+app.get('/recipe/:id', async (req, res) => {
+    const query = RecipeModel.findOne({ _id: req.params.id });
+    return res.send(await query.exec());
+});
+
 app.listen(API_PORT, () => {
     console.log(`auth-service listening on port ${API_PORT}`);
 })

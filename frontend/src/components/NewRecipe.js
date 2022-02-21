@@ -6,7 +6,7 @@ export default function NewRecipe() {
 
     const onSubmit = async (e) => {
         e.preventDefault();
-        const data = await fetch(`${Config.recipe_service_url}/recipe`,
+        await fetch(`${Config.recipe_service_url}/recipe`,
             {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },

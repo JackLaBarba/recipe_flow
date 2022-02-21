@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Config from "../config";
-import recipes from "../fake_data/recipes";
 
 async function fetchRecipes() {
   const data = await fetch(`${Config.recipe_service_url}/recipe`, { method: 'GET' });
@@ -23,7 +22,7 @@ export default function RecipeIndex() {
       <ul>
         {recipes.map((recipe, index) => (
           <li key={index}>
-            <Link to={`/recipes/${index}`}>{recipe.title}</Link>
+            <Link to={`/recipes/${recipe._id}`}>{recipe.title}</Link>
           </li>
         ))}
       </ul>
