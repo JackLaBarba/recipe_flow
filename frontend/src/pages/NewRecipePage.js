@@ -1,5 +1,7 @@
 import { useEffect} from "react";
 import { useNavigate } from "react-router-dom"
+import NewRecipe from "../components/NewRecipe";
+import Config from "../config";
 
 
 export default function NewRecipePage({ user_token }) {
@@ -8,7 +10,7 @@ export default function NewRecipePage({ user_token }) {
     useEffect(() => {
         const verifyUserToken = async (user_token) => {
             if (user_token !== null) {
-                const data = await fetch('http://localhost:4000/verify_token', {
+                const data = await fetch(`${Config.auth_service_url}/verify_token`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -27,5 +29,5 @@ export default function NewRecipePage({ user_token }) {
 
     }, [user_token, navigate]);
 
-    return <div>here's the place where you'd be able to create a new recipe</div>
+    return <NewRecipe></NewRecipe>
 }

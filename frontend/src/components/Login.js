@@ -1,8 +1,9 @@
 import { React, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Config from '../config';
 
 async function loginUser(credentials) {
-    const data = await fetch('http://localhost:4000/login', {
+    const data = await fetch(`${Config.auth_service_url}/login`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
