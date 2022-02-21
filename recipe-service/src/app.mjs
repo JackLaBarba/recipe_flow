@@ -27,6 +27,11 @@ app.post('/recipe', async (req, res) => {
     res.status(201).json(recipe);
 });
 
+app.get('/recipe', async (req, res) => {
+    const query = RecipeModel.find();
+    return res.send(await query.exec());
+});
+
 app.listen(API_PORT, () => {
     console.log(`auth-service listening on port ${API_PORT}`);
 })

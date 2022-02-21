@@ -1,7 +1,20 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import Config from "../config";
 import recipes from "../fake_data/recipes";
 
+async function fetchRecipes() {
+  const data = await fetch(`${Config.recipe_service_url}/recipe`, { method: 'GET' });
+  return data.json();
+}
+
 export default function RecipeIndex() {
+  const [recipes, setRecipes] = useState([]);
+
+  useEffect(() => {
+    return fetchRecipes().then((data) => { setRecipes(data) });
+  }, []);
+
   return (
     <div>
       <h1>RecipeFlow</h1>

@@ -4,7 +4,7 @@ POST http://localhost:4001/recipe HTTP/1.1
 content-type: application/json
 
 {
-    "title": "Demo onion soup",
+    "title": "Demo onion soup 2",
     "description":
       "This onion soup isn't very delicious but it's good for demonstrating a user experience.",
     "ingredients": ["1 onion", "water"],
