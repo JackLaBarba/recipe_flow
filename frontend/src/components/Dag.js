@@ -107,7 +107,7 @@ export const Dag = (props) => {
         nodes.on("click", (e, d) => props.onNodeClick(d.data));
 
         // Remove old D3 elements
-        // update.exit().remove();
+        nodes.exit().remove();
       }
     },
 
