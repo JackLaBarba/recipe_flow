@@ -10,13 +10,10 @@ export default function NewRecipe() {
     const [steps, setSteps] = useState([]);
     const [stepId, setSetId] = useState(1);
     const [modalIsOpen, setIsOpen] = useState(false);
-    const [modalContents, setModalContents] = useState({});
     let navigate = useNavigate();
 
     const openModal = (d) => {
         Modal.setAppElement("#recipe-flow");
-        console.log(d);
-        setModalContents(d);
         setIsOpen(true);
     };
 

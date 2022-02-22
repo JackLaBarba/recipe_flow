@@ -24,3 +24,8 @@ code {
 #root {
   margin-left: 20px;
 }
+
+.step-img {
+  width: 90%;
+  padding-top: 1rem;
+}

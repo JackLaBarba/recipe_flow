@@ -27,7 +27,7 @@ const Recipe = (props) => {
       >
         <h2>Step: {modalContents.title}</h2>
         <img
-          height="50%"
+          className="step-img"
           src={modalContents.imageSource}
           alt={modalContents.title}
         ></img>
