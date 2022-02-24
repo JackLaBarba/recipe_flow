@@ -12,10 +12,12 @@ async function getStockImageUrl(query) {
     // TODO: after the Stock Image Service provides cors headers: * remove
     // no-cors mode * return the response of the image service, not just this
     // picture of ground beef 
-    const response = await fetch(Config.stock_image_service_url + query,
-        { mode: 'no-cors' });
-    await response.text();
-    return "https://images.pexels.com/photos/128401/pexels-photo-128401.jpeg";
+    if (query.length === 0) {
+        return "";
+    }
+    const encoded_query = query.replace(' ', '_');
+    const response = await fetch(Config.stock_image_service_url + encoded_query);
+    return await response.text();
 }
 
 export default function AddStep({ stepId, addStep }) {
@@ -52,6 +54,13 @@ export default function AddStep({ stepId, addStep }) {
         });
     }
 
+    const renderImage = (src) => {
+        if (src.length > 0) {
+            return <img className="step-img" alt={title} src={src}></img>;
+        }
+        return <p>stock image</p>;
+    }
+
     return <form onSubmit={onSubmit}>
         <label>
             <p>Step name</p>
@@ -64,7 +73,7 @@ export default function AddStep({ stepId, addStep }) {
             </input>
         </label>
         <div>
-            <img className="step-img" alt={title} src={imageSource}></img>
+            {renderImage(imageSource)}
         </div>
         <div>
             <button type="submit">Add Step</button>
