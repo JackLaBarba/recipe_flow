@@ -1,0 +1,19 @@
+FROM node:lts AS builder
+
+RUN useradd -ms /bin/bash nonroot
+RUN mkdir /code && chown -R nonroot:nonroot /code
+USER nonroot
+WORKDIR /code
+COPY --chown=nonroot:nonroot package.* .
+RUN npm install
+COPY --chown=nonroot:nonroot . .
+RUN npm run build
+
+FROM node:lts
+RUN npm install -g serve
+RUN useradd -ms /bin/bash nonroot
+RUN mkdir /build && chown -R nonroot:nonroot /build
+USER nonroot
+WORKDIR /build
+COPY --from=builder /code/build .
+ENTRYPOINT [ "serve", "-s", ".", "-l", "3000" ]
