@@ -9,9 +9,6 @@ import debounce from "lodash.debounce";
  * @returns {String} the URL of that image
 */
 async function getStockImageUrl(query) {
-    // TODO: after the Stock Image Service provides cors headers: * remove
-    // no-cors mode * return the response of the image service, not just this
-    // picture of ground beef 
     if (query.length === 0) {
         return "";
     }

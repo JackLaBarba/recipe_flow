@@ -28,15 +28,12 @@ export const Dag = (props) => {
         // This code only handles rendering
         // --------------------------------
         const svgSelection = d3.select("svg");
+        // Prevent stale els on rerender
+        svgSelection.selectChildren().remove();
         svgSelection.attr("viewBox", [0, 0, width, height].join(" "));
         const defs = svgSelection.append("defs"); // For gradients
 
-        // const steps = dag.size();
-        // const interp = d3.interpolateRainbow;
         const colorMap = new Map();
-        //for (const [i, node] of dag.idescendants().entries()) {
-        // colorMap.set(node.data.id, interp(i / steps));
-        //}
 
         // How to draw edges
         const line = d3
@@ -102,7 +99,9 @@ export const Dag = (props) => {
           .attr("font-family", "sans-serif")
           .attr("text-anchor", "middle")
           .attr("alignment-baseline", "middle")
-          .attr("fill", "white");
+          .attr("fill", "white")
+          .attr("textLength", nodeRadius * 1.7)
+          .attr("lengthAdjust", "spacingAndGlyphs");
 
         nodes.on("click", (e, d) => props.onNodeClick(d.data));
 
@@ -110,18 +109,10 @@ export const Dag = (props) => {
         nodes.exit().remove();
       }
     },
-
-    /*
-            useEffect has a dependency array (below). It's a list of dependency
-            variables for this useEffect block. The block will run after mount
-            and whenever any of these variables change. We still have to check
-            if the variables are valid, but we do not have to compare old props
-            to next props to decide whether to rerender.
-        */
-    [props.data, props]
+    [props.data, props.onNodeClick, d3Container]
   );
 
   return (
-    <svg className="d3-component" width={400} height={200} ref={d3Container} />
+    <svg className="d3-component" width="100%" height="100%" ref={d3Container} />
   );
 };
