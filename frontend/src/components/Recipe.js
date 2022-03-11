@@ -18,6 +18,11 @@ const Recipe = (props) => {
     setIsOpen(false);
   }
 
+  function markComplete() {
+    props.markStepCompleted(modalContents.id);
+    closeModal();
+  }
+
   return (
     <div>
       <Modal
@@ -35,7 +40,7 @@ const Recipe = (props) => {
         <div>{modalContents.description}</div>
 
         <button onClick={closeModal}>close</button>
-        <button onClick={closeModal}>Mark completed</button>
+        <button onClick={markComplete}>Mark completed</button>
       </Modal>
       <h2>{props.recipe.title}</h2>
       <h3>Description</h3>

@@ -2,6 +2,19 @@ import React, { useRef, useEffect } from "react";
 import * as d3 from "d3";
 import { dagStratify, sugiyama, decrossOpt } from "d3-dag";
 
+function isReady(node, nodes) {
+  for (const parentId of node.parentIds) {
+    for (const n of nodes) {
+      if (n.id === parentId) {
+        if (!n.isDone) {
+          return false;
+        }
+      }
+    }
+  }
+  return true;
+}
+
 /* Component */
 export const Dag = (props) => {
   /* The useRef Hook creates a variable that "holds on" to a value across rendering
@@ -89,7 +102,15 @@ export const Dag = (props) => {
         nodes
           .append("circle")
           .attr("r", nodeRadius)
-          .attr("fill", (n) => colorMap.get(n.data.id));
+          .attr("fill", (n) => {
+            if (n.data.isDone) {
+              return "grey";
+            }
+            if (isReady(n.data, props.data)) {
+              return "green";
+            }
+            return "black";
+          });
 
         // Add text to nodes
         nodes
@@ -109,7 +130,7 @@ export const Dag = (props) => {
         nodes.exit().remove();
       }
     },
-    [props.data, props.onNodeClick, d3Container]
+    [props.data, props.onNodeClick, props, d3Container]
   );
 
   return (

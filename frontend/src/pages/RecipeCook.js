@@ -1,6 +1,7 @@
 import Recipe from "../components/Recipe";
 import { Link } from "react-router-dom";
 import Config from "../config";
+import cloneDeep from 'lodash/cloneDeep';
 
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -8,7 +9,11 @@ import { useEffect, useState } from "react";
 async function fetchRecipe(id) {
   console.log("hello!");
   const data = await fetch(`${Config.recipe_service_url}/recipe/${id}`, { method: 'GET' });
-  return data.json();
+  let recipe = await data.json();
+  for (let step in recipe.steps) {
+    recipe.steps[step].isDone = false;
+  };
+  return recipe;
 }
 
 export default function RecipeCook() {
@@ -17,7 +22,19 @@ export default function RecipeCook() {
 
   useEffect(() => {
     fetchRecipe(params.recipeId).then((r) => { setRecipe(r) });
-  }, []);
+  }, [params.recipeId]);
+
+  const markStepCompleted = (stepId) => {
+    let new_recipe = cloneDeep(recipe);
+    for (let step of new_recipe.steps) {
+      if (step.id === stepId) {
+        step.isDone = true;
+        setRecipe(new_recipe);
+        return;
+      }
+    }
+    console.warn("Attempted to mark a step complete, but I couldn't find it");
+  }
 
   if (!recipe) {
     return <p>loading ...</p>
@@ -26,7 +43,7 @@ export default function RecipeCook() {
       <div>
         <h1>RecipeFlow</h1>
         <Link to={`/recipes`}>go back to Recipes</Link>
-        <Recipe recipe={recipe} />
+        <Recipe recipe={recipe} markStepCompleted={markStepCompleted} />
       </div>
     );
   }
