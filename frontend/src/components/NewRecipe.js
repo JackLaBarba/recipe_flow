@@ -7,6 +7,8 @@ import Modal from "react-modal";
 
 export default function NewRecipe() {
     const [title, setTitle] = useState("");
+    const [description, setDescription] = useState(""); 
+
     const [steps, setSteps] = useState([]);
     const [stepId, setSetId] = useState(1);
     const [modalIsOpen, setIsOpen] = useState(false);
@@ -27,7 +29,7 @@ export default function NewRecipe() {
             {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ title, steps })
+                body: JSON.stringify({ title, description, steps })
             }
         );
         navigate("/recipes/");
@@ -53,6 +55,10 @@ export default function NewRecipe() {
             <label>
                 <h2>Title</h2>
                 <input type="text" onChange={e => setTitle(e.target.value)}></input>
+            </label>
+            <label>
+                <h2>Description</h2>
+                <input type="text" onChange={e => setDescription(e.target.value)}></input>
             </label>
             <h2>Steps</h2>
             <div>

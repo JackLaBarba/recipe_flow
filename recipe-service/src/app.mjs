@@ -17,10 +17,11 @@ app.use(bodyParser.json())
 const { API_PORT } = process.env;
 
 app.post('/recipe', async (req, res) => {
-    const { title, steps } = req.body;
+    const { title, description, steps } = req.body;
 
     const recipe = await RecipeModel.create({
         title,
+        description,
         steps
     });
 
