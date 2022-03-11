@@ -1,9 +1,10 @@
 import { Dag } from "./Dag";
+import StepActions from "./StepActions";
 import Modal from "react-modal";
 
 import { useState } from "react";
 
-const Recipe = (props) => {
+function Recipe(props) {
   const [modalIsOpen, setIsOpen] = useState(false);
   const [modalContents, setModalContents] = useState({});
 
@@ -16,11 +17,6 @@ const Recipe = (props) => {
 
   function closeModal() {
     setIsOpen(false);
-  }
-
-  function markComplete() {
-    props.markStepCompleted(modalContents.id);
-    closeModal();
   }
 
   return (
@@ -40,7 +36,7 @@ const Recipe = (props) => {
         <div>{modalContents.description}</div>
 
         <button onClick={closeModal}>close</button>
-        <button onClick={markComplete}>Mark completed</button>
+        <StepActions isDone={modalContents.isDone} stepId={modalContents.id} markStepDoneness={props.markStepDoneness} closeModal={closeModal} />
       </Modal>
       <h2>{props.recipe.title}</h2>
       <h3>Description</h3>

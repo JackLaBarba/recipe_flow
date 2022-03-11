@@ -24,11 +24,11 @@ export default function RecipeCook() {
     fetchRecipe(params.recipeId).then((r) => { setRecipe(r) });
   }, [params.recipeId]);
 
-  const markStepCompleted = (stepId) => {
+  const markStepDoneness = (stepId, value) => {
     let new_recipe = cloneDeep(recipe);
     for (let step of new_recipe.steps) {
       if (step.id === stepId) {
-        step.isDone = true;
+        step.isDone = value;
         setRecipe(new_recipe);
         return;
       }
@@ -43,7 +43,7 @@ export default function RecipeCook() {
       <div>
         <h1>RecipeFlow</h1>
         <Link to={`/recipes`}>go back to Recipes</Link>
-        <Recipe recipe={recipe} markStepCompleted={markStepCompleted} />
+        <Recipe recipe={recipe} markStepDoneness={markStepDoneness} />
       </div>
     );
   }

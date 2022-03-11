@@ -15,6 +15,16 @@ function isReady(node, nodes) {
   return true;
 }
 
+function getColor(node, nodes) {
+  if (node.isDone) {
+    return "grey";
+  }
+  if (isReady(node, nodes)) {
+    return "green";
+  }
+  return "black";
+}
+
 /* Component */
 export const Dag = (props) => {
   /* The useRef Hook creates a variable that "holds on" to a value across rendering
@@ -45,8 +55,6 @@ export const Dag = (props) => {
         svgSelection.selectChildren().remove();
         svgSelection.attr("viewBox", [0, 0, width, height].join(" "));
         const defs = svgSelection.append("defs"); // For gradients
-
-        const colorMap = new Map();
 
         // How to draw edges
         const line = d3
@@ -81,11 +89,11 @@ export const Dag = (props) => {
             grad
               .append("stop")
               .attr("offset", "0%")
-              .attr("stop-color", colorMap.get(source.data.id));
+              .attr("stop-color", getColor(source.data, props.data));
             grad
               .append("stop")
               .attr("offset", "100%")
-              .attr("stop-color", colorMap.get(target.data.id));
+              .attr("stop-color", getColor(target.data, props.data));
             return `url(#${gradId})`;
           });
 
