@@ -142,6 +142,6 @@ export const Dag = (props) => {
   );
 
   return (
-    <svg className="d3-component" width="100%" height="100%" ref={d3Container} />
+    <svg className="d3-component" width="100%" ref={d3Container} />
   );
 };

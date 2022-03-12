@@ -32,10 +32,8 @@ function Recipe(props) {
           src={modalContents.imageSource}
           alt={modalContents.title}
         ></img>
-        <h3>Description</h3>
         <div>{modalContents.description}</div>
 
-        <button onClick={closeModal}>close</button>
         <StepActions isDone={modalContents.isDone} stepId={modalContents.id} markStepDoneness={props.markStepDoneness} closeModal={closeModal} />
       </Modal>
       <h2>{props.recipe.title}</h2>

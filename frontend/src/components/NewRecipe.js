@@ -65,7 +65,7 @@ export default function NewRecipe() {
             </label>
             <label>
                 <h2>Description</h2>
-                <input type="textarea" onChange={e => setDescription(e.target.value)} ></input>
+                <textarea onChange={e => setDescription(e.target.value)} ></textarea>
             </label>
             <h2>Ingredients</h2>
             <ul>
@@ -73,7 +73,7 @@ export default function NewRecipe() {
             </ul>
             <label>
                 <input type="text" onChange={e => setNewIngredient(e.target.value)} value={newIngredient}></input>
-                <button onClick={addIngredient}>Add</button>
+                <button onClick={addIngredient} className="inline-button">Add</button>
             </label>
 
             <h2>Steps</h2>
@@ -83,7 +83,7 @@ export default function NewRecipe() {
 
             {steps.length > 0 && <Dag data={steps}></Dag>}
             <div>
-                <button type="submit" onClick={onSubmit}>Publish Recipe!</button>
+                <button type="submit" onClick={onSubmit} className="done-action">Publish Recipe!</button>
             </div>
         </div>)
 }

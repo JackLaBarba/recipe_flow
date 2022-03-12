@@ -11,9 +11,9 @@ function StepActions({ isDone, stepId, markStepDoneness, closeModal }) {
     }
 
     if (isDone) {
-        return <button onClick={markIncomplete}>Mark Incomplete</button>
+        return <button onClick={markIncomplete} className="secondary-action">Mark Incomplete</button>
     }
-    return <button onClick={markComplete}>Mark completed</button>
+    return <button onClick={markComplete} className="done-action">Mark completed</button>
 }
 
 export default StepActions;

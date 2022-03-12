@@ -93,7 +93,7 @@ export default function AddStep({ stepId, addStep, otherSteps }) {
             return <div></div>
         }
         return <div>
-            <h2>Blocking steps</h2>
+            <h2>Blockers</h2>
             <ul>
                 {parents.map((step, key) => {
                     return <li key={key}>{step.title}</li>
@@ -104,7 +104,7 @@ export default function AddStep({ stepId, addStep, otherSteps }) {
                     return <option value={step.id} key={index}>{step.title}</option>
                 })}
             </select>
-            <button onClick={addSelectedParent}>Add Blocking Step</button>
+            <button onClick={addSelectedParent} className="inline-button">Add Blocker</button>
         </div>
     }
 
@@ -127,7 +127,7 @@ export default function AddStep({ stepId, addStep, otherSteps }) {
         {blockingSteps()}
 
         <div>
-            <button type="submit">Add Step</button>
+            <button type="submit" className="done-action">Add Step</button>
         </div>
 
         <div>
