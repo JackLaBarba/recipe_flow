@@ -45,7 +45,6 @@ export default function NewRecipe() {
 
     const addIngredient = (e) => {
         e.preventDefault();
-        console.log("hello?");
         setIngredients([...ingredients, newIngredient]);
         setNewIngredient("");
     }
@@ -57,7 +56,7 @@ export default function NewRecipe() {
                 onRequestClose={closeModal}
                 contentLabel="Step"
             >
-                <AddStep stepId={stepId} addStep={addStep}></AddStep>
+                <AddStep stepId={stepId} addStep={addStep} otherSteps={steps}></AddStep>
 
             </Modal>
             <label>
@@ -66,7 +65,7 @@ export default function NewRecipe() {
             </label>
             <label>
                 <h2>Description</h2>
-                <input type="text" onChange={e => setDescription(e.target.value)} ></input>
+                <input type="textarea" onChange={e => setDescription(e.target.value)} ></input>
             </label>
             <h2>Ingredients</h2>
             <ul>

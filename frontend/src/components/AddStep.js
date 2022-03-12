@@ -1,4 +1,4 @@
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Config from "../config";
 import debounce from "lodash.debounce";
 
@@ -17,10 +17,17 @@ async function getStockImageUrl(query) {
     return await response.text();
 }
 
-export default function AddStep({ stepId, addStep }) {
+export default function AddStep({ stepId, addStep, otherSteps }) {
     const [title, setTitle] = useState("");
     const [imageSource, setImageSource] = useState("");
-    const [parents, setParents] = useState("");
+    const [parents, setParents] = useState([]);
+    const [selectedParentId, setSelectedParentId] = useState();
+
+    useEffect(() => {
+        if (otherSteps.length > 0) {
+            setSelectedParentId(otherSteps[0].id);
+        }
+    }, [otherSteps]);
 
     // Debounce requests to the stock image service so we don't overwhelm it
     // with requests generating from each of the user's keystrokes.
@@ -38,7 +45,7 @@ export default function AddStep({ stepId, addStep }) {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        let parentIds = parents.split(",");
+        let parentIds = parents.map((step) => step.id);
         if (parentIds[0] === "") {
             parentIds = [];
         }
@@ -55,7 +62,49 @@ export default function AddStep({ stepId, addStep }) {
         if (src.length > 0) {
             return <img className="step-img" alt={title} src={src}></img>;
         }
-        return <p>stock image</p>;
+        return <p></p>;
+    }
+
+    const newSelectedParent = (e) => {
+        e.preventDefault();
+        setSelectedParentId(e.target.value);
+    }
+
+    const addSelectedParent = (e) => {
+        e.preventDefault();
+        let parentStep = null;
+        console.log(selectedParentId);
+        for (const step of otherSteps) {
+            if (step.id === selectedParentId) {
+                parentStep = step;
+                break;
+            }
+        }
+        if (!parentStep) {
+            console.error("Attempted to add a parent step, but I couldn't find it");
+            return;
+        }
+        setParents([...parents, parentStep]);
+    }
+
+    const blockingSteps = () => {
+        if (otherSteps.length === 0) {
+            return <div></div>
+        }
+        return <div>
+            <h2>Blocking steps</h2>
+            <ul>
+                {parents.map((step, key) => {
+                    return <li key={key}>{step.title}</li>
+                })}
+            </ul>
+            <select value={selectedParentId} onChange={newSelectedParent}>
+                {otherSteps.map((step, index) => {
+                    return <option value={step.id} key={index}>{step.title}</option>
+                })}
+            </select>
+            <button onClick={addSelectedParent}>Add Blocking Step</button>
+        </div>
     }
 
     return <form onSubmit={onSubmit}>
@@ -64,16 +113,15 @@ export default function AddStep({ stepId, addStep }) {
             <input type="text" onChange={(e) => updateTitle(e.target.value)}>
             </input>
         </label>
-        <label>
-            <p>Parents (comma separated)</p>
-            <input type="test" onChange={(e) => setParents(e.target.value)}>
-            </input>
-        </label>
-        <div>
-            {renderImage(imageSource)}
-        </div>
+
+        {blockingSteps()}
+
         <div>
             <button type="submit">Add Step</button>
+        </div>
+
+        <div>
+            {renderImage(imageSource)}
         </div>
     </form>
 
