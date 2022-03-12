@@ -22,6 +22,7 @@ export default function AddStep({ stepId, addStep, otherSteps }) {
     const [imageSource, setImageSource] = useState("");
     const [parents, setParents] = useState([]);
     const [selectedParentId, setSelectedParentId] = useState();
+    const [description, setDescription] = useState("");
 
     useEffect(() => {
         if (otherSteps.length > 0) {
@@ -52,7 +53,7 @@ export default function AddStep({ stepId, addStep, otherSteps }) {
         addStep({
             id: stepId.toString(),
             title,
-            description: "placeholder",
+            description,
             imageSource,
             parentIds,
         });
@@ -107,11 +108,20 @@ export default function AddStep({ stepId, addStep, otherSteps }) {
         </div>
     }
 
+    const updateDescription = (e) => {
+        e.preventDefault();
+        setDescription(e.target.value);
+    }
+
     return <form onSubmit={onSubmit}>
         <label>
             <p>Step name</p>
             <input type="text" onChange={(e) => updateTitle(e.target.value)}>
             </input>
+        </label>
+        <label>
+            <p>Description</p>
+            <textarea onChange={updateDescription}></textarea>
         </label>
 
         {blockingSteps()}
