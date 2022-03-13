@@ -25,15 +25,104 @@ function getColor(node, nodes) {
   return "black";
 }
 
-/* Component */
+function plotEdges(svgSelection, dag, steps) {
+  const defs = svgSelection.append("defs"); // For gradients
+  
+  // Set up line params
+  const line = d3
+    .line()
+    .curve(d3.curveCatmullRom)
+    .x((d) => d.x)
+    .y((d) => d.y);
+
+  // Plot the edges
+  svgSelection
+    .append("g")
+    .selectAll("path")
+    .data(dag.links())
+    .enter()
+    .append("path")
+    .attr("d", ({ points }) => line(points))
+    .attr("fill", "none")
+    .attr("stroke-width", 3)
+    .attr("stroke", ({ source, target }) => {
+      // encodeURIComponents for spaces, hope id doesn't have a `--` in it
+      const gradId = encodeURIComponent(
+        `${source.data.id}--${target.data.id}`
+      );
+      const grad = defs
+        .append("linearGradient")
+        .attr("id", gradId)
+        .attr("gradientUnits", "userSpaceOnUse")
+        .attr("x1", source.x)
+        .attr("x2", target.x)
+        .attr("y1", source.y)
+        .attr("y2", target.y);
+      grad
+        .append("stop")
+        .attr("offset", "0%")
+        .attr("stop-color", getColor(source.data, steps));
+      grad
+        .append("stop")
+        .attr("offset", "100%")
+        .attr("stop-color", getColor(target.data, steps));
+      return `url(#${gradId})`;
+    });
+}
+
+function selectNodes(svgSelection, dag) {
+  return svgSelection
+    .append("g")
+    .selectAll("g")
+    .data(dag.descendants())
+    .enter()
+    .append("g")
+    .attr("transform", ({ x, y }) => `translate(${x}, ${y})`);
+}
+
+function plotNodeCircles(nodes, nodeRadius, steps) {
+  nodes
+    .append("circle")
+    .attr("r", nodeRadius)
+    .attr("fill", (n) => {
+      if (n.data.isDone) {
+        return "grey";
+      }
+      if (isReady(n.data, steps)) {
+        return "green";
+      }
+      return "black";
+    });
+}
+
+function addTextToNodes(nodes, nodeRadius) {
+  nodes
+    .append("text")
+    .text((d) => d.data.title)
+    .attr("font-weight", "bold")
+    .attr("font-family", "sans-serif")
+    .attr("text-anchor", "middle")
+    .attr("alignment-baseline", "middle")
+    .attr("fill", "white")
+    .attr("textLength", nodeRadius * 1.7)
+    .attr("lengthAdjust", "spacingAndGlyphs");
+}
+
+function renderDag(dag, layout, nodeRadius, steps) {
+  const { width, height } = layout(dag);
+  const svgSelection = d3.select("svg");
+  svgSelection.selectChildren().remove();  // Prevent stale els on rerender
+  svgSelection.attr("viewBox", [0, 0, width, height].join(" "));
+  plotEdges(svgSelection, dag, steps);
+  let nodes = selectNodes(svgSelection, dag);
+  plotNodeCircles(nodes, nodeRadius, steps);
+  addTextToNodes(nodes, nodeRadius);
+  return nodes;
+}
+
 export const Dag = (props) => {
-  /* The useRef Hook creates a variable that "holds on" to a value across rendering
-       passes. In this case it will hold our component's SVG DOM element. It's
-       initialized null and React will assign it later (see the return statement) */
   const d3Container = useRef(null);
 
-  /* The useEffect Hook is for running side effects outside of React,
-       for instance inserting elements into the DOM using D3 */
   useEffect(
     () => {
       if (props.data && d3Container.current) {
@@ -45,97 +134,9 @@ export const Dag = (props) => {
             (node ? 3.6 : 0.25) * nodeRadius,
             3 * nodeRadius,
           ]); // set node size instead of constraining to fit
-        const { width, height } = layout(dag);
 
-        // --------------------------------
-        // This code only handles rendering
-        // --------------------------------
-        const svgSelection = d3.select("svg");
-        // Prevent stale els on rerender
-        svgSelection.selectChildren().remove();
-        svgSelection.attr("viewBox", [0, 0, width, height].join(" "));
-        const defs = svgSelection.append("defs"); // For gradients
-
-        // How to draw edges
-        const line = d3
-          .line()
-          .curve(d3.curveCatmullRom)
-          .x((d) => d.x)
-          .y((d) => d.y);
-
-        // Plot edges
-        svgSelection
-          .append("g")
-          .selectAll("path")
-          .data(dag.links())
-          .enter()
-          .append("path")
-          .attr("d", ({ points }) => line(points))
-          .attr("fill", "none")
-          .attr("stroke-width", 3)
-          .attr("stroke", ({ source, target }) => {
-            // encodeURIComponents for spaces, hope id doesn't have a `--` in it
-            const gradId = encodeURIComponent(
-              `${source.data.id}--${target.data.id}`
-            );
-            const grad = defs
-              .append("linearGradient")
-              .attr("id", gradId)
-              .attr("gradientUnits", "userSpaceOnUse")
-              .attr("x1", source.x)
-              .attr("x2", target.x)
-              .attr("y1", source.y)
-              .attr("y2", target.y);
-            grad
-              .append("stop")
-              .attr("offset", "0%")
-              .attr("stop-color", getColor(source.data, props.data));
-            grad
-              .append("stop")
-              .attr("offset", "100%")
-              .attr("stop-color", getColor(target.data, props.data));
-            return `url(#${gradId})`;
-          });
-
-        // Select nodes
-        const nodes = svgSelection
-          .append("g")
-          .selectAll("g")
-          .data(dag.descendants())
-          .enter()
-          .append("g")
-          .attr("transform", ({ x, y }) => `translate(${x}, ${y})`);
-
-        // Plot node circles
-        nodes
-          .append("circle")
-          .attr("r", nodeRadius)
-          .attr("fill", (n) => {
-            if (n.data.isDone) {
-              return "grey";
-            }
-            if (isReady(n.data, props.data)) {
-              return "green";
-            }
-            return "black";
-          });
-
-        // Add text to nodes
-        nodes
-          .append("text")
-          .text((d) => d.data.title)
-          .attr("font-weight", "bold")
-          .attr("font-family", "sans-serif")
-          .attr("text-anchor", "middle")
-          .attr("alignment-baseline", "middle")
-          .attr("fill", "white")
-          .attr("textLength", nodeRadius * 1.7)
-          .attr("lengthAdjust", "spacingAndGlyphs");
-
+        let nodes = renderDag(dag, layout, nodeRadius, props.data);
         nodes.on("click", (e, d) => props.onNodeClick(d.data));
-
-        // Remove old D3 elements
-        nodes.exit().remove();
       }
     },
     [props.data, props.onNodeClick, props, d3Container]

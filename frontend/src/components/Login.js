@@ -29,7 +29,7 @@ export default function Login({ setUserToken }) {
             setError(error);
         } else {
             setUserToken(token);
-            navigate("/recipes/new");  // TODO: redirect to the page the user attempted to view
+            navigate("/recipes/new");
         }
       }    
 

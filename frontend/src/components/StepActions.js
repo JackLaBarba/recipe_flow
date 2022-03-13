@@ -1,4 +1,3 @@
-
 function StepActions({ isDone, stepId, markStepDoneness, closeModal }) {
     function markComplete() {
         markStepDoneness(stepId, true);

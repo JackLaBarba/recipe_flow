@@ -1,6 +1,10 @@
 # Recipe Flow
 
-Cook food with DAGs
+Cook and create recipes with directed acyclic graphs!
+
+![dag example](dag-example.png)
+
+[Demo on YouTube](https://youtu.be/WrgtrZ2o-0U)
 
 ## Instructions
 ### To run
@@ -12,7 +16,3 @@ Steps:
 2. `docker-compose up`
 
 visit http://localhost:3000 in your browser
-
-### To test
-
-I'm ashamed to say there are no tests.
